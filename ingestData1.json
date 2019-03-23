@@ -1,0 +1,11 @@
+[
+    { "PartitionKey": "BREAKFAST-2019-04-22", "SortKey": "BREAKFAST", "Data": "2019-04-22" },
+    { "PartitionKey": "BREAKFAST-2019-04-22", "SortKey": "ORDER-001", "Data": "0" },
+    { "PartitionKey": "BREAKFAST-2019-04-29", "SortKey": "BREAKFAST", "Data": "2019-04-29" },
+    { "PartitionKey": "BREAKFAST-2019-04-29", "SortKey": "ORDER-002", "Data": "2019-04-29" },
+    { "PartitionKey": "ITEM-001", "SortKey": "ITEM", "Data": "Bacon Sandwich" },
+    { "PartitionKey": "ORDER-001", "SortKey": "USER-janakerman", "Data": "ITEM-001" },
+    { "PartitionKey": "ORDER-002", "SortKey": "USER-hungry-dev", "Data": "ITEM-001" },
+    { "PartitionKey": "USER-janakerman", "SortKey": "Jan Akerman", "Data": "0" },
+    { "PartitionKey": "USER-hungry-dev", "SortKey": "Dev Hungry", "Data": "0" }
+]

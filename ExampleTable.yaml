@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  DataIngestStackName:
+    Description: Name of the cloud formation stack which contains the data ingest lambda.
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+  IngestDataFile:
+    Description: The data file to ingest from the ingest bucket
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  MyDynamoDBTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: "PartitionKey"
+          AttributeType: "S"
+        - AttributeName: "SortKey"
+          AttributeType: "S"
+        - AttributeName: "Data"
+          AttributeType: "S"
+      KeySchema: 
+        - AttributeName: "PartitionKey"
+          KeyType: "HASH"
+        - AttributeName: "SortKey"
+          KeyType: "RANGE"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      TableName: "RelationalExampleTable"
+      GlobalSecondaryIndexes: 
+        - IndexName: "GSI1"
+          KeySchema: 
+            - AttributeName: "SortKey"
+              KeyType: "HASH"
+            - AttributeName: "Data"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: "1"
+            WriteCapacityUnits: "1"
+
+  DataIngestLambdaTrigger:
+    Type: Custom::DataIngestLambdaTrigger
+    Properties:
+        ServiceToken: 
+          Fn::ImportValue:
+            !Sub "${DataIngestStackName}-ingest-lambda"
+        TargetTable: !Ref MyDynamoDBTable
+        DataIngestFile: !Ref IngestDataFile
+    DependsOn:
+      - MyDynamoDBTable    
+        
